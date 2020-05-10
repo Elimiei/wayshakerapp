@@ -1,70 +1,43 @@
-import React from 'react';
-import {
-    StyleSheet,
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity
-} from 'react-native';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation'
+import {createStackNavigator} from "react-navigation-stack";
+import LoadingScreen from "./screens/loadingScreen";
+import RegisterScreen from "./screens/registerScreen";
+import LoginScreen from "./screens/loginScreen";
+import HomeScreen from "./screens/homeScreen";
 
-export default class LoginScreen extends React.Component {
+import * as firebase from "firebase";
 
-    constructor(props) {
-        super(props);
-        this.state = {username: '', password: ''}
-    }
+var firebaseConfig = {
+    apiKey: "AIzaSyB29O4kR5jGtJLgVEhU2fVx_1CXaA5gLhg",
+    authDomain: "wayshakerbdd.firebaseapp.com",
+    databaseURL: "https://wayshakerbdd.firebaseio.com",
+    projectId: "wayshakerbdd",
+    storageBucket: "wayshakerbdd.appspot.com",
+    messagingSenderId: "1033199004292",
+    appId: "1:1033199004292:web:3e1e664ee82e7e83b870d1",
+    measurementId: "G-11SVBPKBY3"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text
-                    style={styles.welcome}>
-                    Login !</Text>
-                <TextInput
-                    onChangeText={(username) => this.setState({username})}
-                    value={(this.state.username)}
-                    style={styles.input} placeholder={"Username"}/>
-                <TextInput
-                    onChangeText={(password) => this.setState({password})}
-                    value={(this.state.password)}
-                    style={styles.input} placeholder={"Password"}
-                    secureTextEntry={true}/>
-                <TouchableOpacity
-                    style={styles.btnEnter}
-                    onPress={this._signin}
-                >
-                    <Text>ENTER</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+const AppStack = createStackNavigator({
+    Home : HomeScreen
+})
 
-    _signin = async () => {
+const AuthStack = createStackNavigator({
+    Login : LoginScreen,
+    Register : RegisterScreen
+})
 
-    }
-}
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#ffffff'
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10
-    },
-    input: {
-        borderBottomWidth: 2,
-        borderBottomColor: 'blue'
-
-    },
-    btnEnter: {
-        justifyContent: 'center',
-        flexDirection: 'row',
-        alignItems: 'center'
-    }
-});
+export default createAppContainer(
+    createSwitchNavigator(
+        {
+            Loading : LoadingScreen,
+            App : AppStack,
+            Auth : AuthStack
+        },
+        {
+            initialRouteName: "Loading"
+        }
+    )
+)
