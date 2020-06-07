@@ -4,24 +4,20 @@ import LoadingScreen from "./screens/loadingScreen";
 import RegisterScreen from "./screens/registerScreen";
 import LoginScreen from "./screens/loginScreen";
 import HomeScreen from "./screens/homeScreen";
+import FindScreen from "./screens/findScreen";
+import DigScreen from "./screens/digScreen";
+import ValidateScreen from "./screens/validateScreen";
+import ProjectsScreen from "./screens/projectsScreen";
+import Header from "@react-navigation/stack/src/views/Header/Header";
+import React from "react";
 
-import * as firebase from "firebase";
-
-var firebaseConfig = {
-    apiKey: "AIzaSyB29O4kR5jGtJLgVEhU2fVx_1CXaA5gLhg",
-    authDomain: "wayshakerbdd.firebaseapp.com",
-    databaseURL: "https://wayshakerbdd.firebaseio.com",
-    projectId: "wayshakerbdd",
-    storageBucket: "wayshakerbdd.appspot.com",
-    messagingSenderId: "1033199004292",
-    appId: "1:1033199004292:web:3e1e664ee82e7e83b870d1",
-    measurementId: "G-11SVBPKBY3"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
 
 const AppStack = createStackNavigator({
-    Home : HomeScreen
+    Home : HomeScreen,
+    Find : FindScreen,
+    Dig : DigScreen,
+    Validate : ValidateScreen,
+    Projects : ProjectsScreen,
 })
 
 const AuthStack = createStackNavigator({

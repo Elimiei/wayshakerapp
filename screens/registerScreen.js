@@ -1,15 +1,20 @@
 import React from 'react'
 import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
-import * as firebase from "firebase";
+import firebase, {usersCollection} from "./../database/firebaseDB";
 
 export default class RegisterScreen extends React.Component {
-    state = {
-        name: "",
-        surname: "",
-        ageRange: "",
-        email: "",
-        password: "",
-        errorMessage: null
+
+    constructor() {
+        super();
+        this.state = {
+            name: "",
+            firstName: "",
+            ageRange: "",
+            email: "",
+            password: "",
+            errorMessage: null,
+            isLoading : false
+        };
     }
 
     handleRegister = () => {
@@ -17,15 +22,24 @@ export default class RegisterScreen extends React.Component {
 
         firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(userCredentials => {
-                return userCredentials.user.updateProfile({
-                    displayName: this.state.name
-                })
+                usersCollection.doc(userCredentials.user.uid).set(
+                    {name: this.state.name,
+                        email: this.state.email,
+                        firstName: this.state.firstName,
+                        ageRange: this.state.ageRange
+                    }
+                ).then(() => console.log("ok"));
+                }).catch((err) => {
+                        console.error("Error found: ", err);
+                        this.setState({
+                            isLoading: false,
+                        });
             })
         .catch(error => this.setState({errorMessage: error.message}))
     }
 
-
     render() {
+
         return (
             <View style={styles.container}>
                 <Text style={styles.greeting}>
@@ -46,11 +60,11 @@ export default class RegisterScreen extends React.Component {
                         />
                     </View>
                     <View>
-                        <Text style={styles.inputTitle}>Surname</Text>
+                        <Text style={styles.inputTitle}>firstName</Text>
                         <TextInput style={styles.input}
                                    autocapitalize="none"
-                                   onChangeText={surname => this.setState({surname})}
-                                   value={this.state.surname}
+                                   onChangeText={firstName => this.setState({firstName})}
+                                   value={this.state.firstName}
                         />
                     </View>
                     <View>
