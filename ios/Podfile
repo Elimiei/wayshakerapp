@@ -77,8 +77,6 @@ target 'wayshakerapp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'RNFBFirestore', :path => '../node_modules/@react-native-firebase/firestore'
-
   target 'wayshakerappTests' do
     inherit! :complete
     # Pods for testing
