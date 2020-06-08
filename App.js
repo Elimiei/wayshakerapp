@@ -4,12 +4,13 @@ import LoadingScreen from "./screens/loadingScreen";
 import RegisterScreen from "./screens/registerScreen";
 import LoginScreen from "./screens/loginScreen";
 import HomeScreen from "./screens/homeScreen";
-import FindScreen from "./screens/findScreen";
+import FindScreen from "./screens/find/findScreen";
 import DigScreen from "./screens/digScreen";
 import ValidateScreen from "./screens/validateScreen";
 import ProjectsScreen from "./screens/projectsScreen";
 import Header from "@react-navigation/stack/src/views/Header/Header";
 import React from "react";
+import CreateIdeas from "./screens/find/createIdeas";
 
 
 const AppStack = createStackNavigator({
@@ -18,6 +19,7 @@ const AppStack = createStackNavigator({
     Dig : DigScreen,
     Validate : ValidateScreen,
     Projects : ProjectsScreen,
+    CreateIdeas : CreateIdeas
 })
 
 const AuthStack = createStackNavigator({

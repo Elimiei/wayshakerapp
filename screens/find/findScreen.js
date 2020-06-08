@@ -1,6 +1,6 @@
 import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native'
-import firebase, {usersCollection} from "./../database/firebaseDB";
+import firebase, {usersCollection} from "../../database/firebaseDB";
 
 
 export default class FindScreen extends React.Component {
@@ -12,8 +12,11 @@ export default class FindScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text> Ecran de TROUVER UNE IDEE</Text>
+                <Text>Exercice du brainstorming</Text>
 
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("CreateIdeas")}>
+                    <Text>GO !</Text>
+                </TouchableOpacity>
 
             </View>
         )

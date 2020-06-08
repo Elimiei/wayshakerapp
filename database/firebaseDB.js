@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 import firestore from '@react-native-firebase/firestore';
-export {usersCollection};
+export {usersCollection, questionsCollection};
 
 
 const firebaseConfig = {
@@ -16,5 +16,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const usersCollection = firestore().collection('Users');
+const questionsCollection = firestore().collection('Questions');
 
 export default firebase;
