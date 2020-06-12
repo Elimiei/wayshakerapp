@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, Button, TextInput} from 'react-native'
 import firebase, {questionsCollection, usersCollection} from "../../database/firebaseDB";
 import index from "@react-native-community/masked-view";
+import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
 
 
 export default class CreateIdeas extends React.Component {
@@ -62,6 +63,11 @@ export default class CreateIdeas extends React.Component {
                     <Text> Envoyer ! </Text>
                 </TouchableOpacity>
 
+                <Stopwatch laps msecs start={this.state.stopwatchStart}
+                           reset={this.state.stopwatchReset}
+                           options={options}
+                           getTime={this.getFormattedTime} />
+
 
             </View>
         )
@@ -85,6 +91,22 @@ export default class CreateIdeas extends React.Component {
         } else {
             // TODO chrono
         }
+    }
+
+    toggleTimer() {
+        this.setState({timerStart: !this.state.timerStart, timerReset: false});
+    }
+
+    resetTimer() {
+        this.setState({timerStart: false, timerReset: true});
+    }
+
+    toggleStopwatch() {
+        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
+    }
+
+    resetStopwatch() {
+        this.setState({stopwatchStart: false, stopwatchReset: true});
     }
 
     handleIndex(sign) {
