@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import firebase, {usersCollection} from "./../database/firebaseDB";
 
 export default class RegisterScreen extends React.Component {
@@ -13,7 +13,7 @@ export default class RegisterScreen extends React.Component {
             email: "",
             password: "",
             errorMessage: null,
-            isLoading : false
+            isLoading: false
         };
     }
 
@@ -23,19 +23,20 @@ export default class RegisterScreen extends React.Component {
         firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(userCredentials => {
                 usersCollection.doc(userCredentials.user.uid).set(
-                    {name: this.state.name,
+                    {
+                        name: this.state.name,
                         email: this.state.email,
                         firstName: this.state.firstName,
                         ageRange: this.state.ageRange
                     }
                 ).then(() => console.log("ok"));
-                }).catch((err) => {
-                        console.error("Error found: ", err);
-                        this.setState({
-                            isLoading: false,
-                        });
-            })
-        .catch(error => this.setState({errorMessage: error.message}))
+            }).catch((err) => {
+            console.error("Error found: ", err);
+            this.setState({
+                isLoading: false,
+            });
+        })
+            .catch(error => this.setState({errorMessage: error.message}))
     }
 
     render() {

@@ -2,7 +2,7 @@ import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, Button, TextInput} from 'react-native'
 import firebase, {questionsCollection, usersCollection} from "../../database/firebaseDB";
 import index from "@react-native-community/masked-view";
-import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
+import {Stopwatch, Timer} from 'react-native-stopwatch-timer'
 
 
 export default class CreateIdeas extends React.Component {
@@ -17,15 +17,15 @@ export default class CreateIdeas extends React.Component {
         "5- J'écris UNE idée\n" +
         "Ainsi de suite...";
     chronoActive = false;
-    chronoAlreadyDone = false;
 
 
     state = {
         question: "Fais défiler les flèches pour obtenir une question !",
         text: "",
-        arrayIdeas: []
+        arrayIdeas: [],
+        totalDuration: 6000,
+        chronoAlreadyDone : false
     }
-
 
 
     componentDidMount() {
@@ -63,50 +63,62 @@ export default class CreateIdeas extends React.Component {
                     <Text> Envoyer ! </Text>
                 </TouchableOpacity>
 
-                <Stopwatch laps msecs start={this.state.stopwatchStart}
-                           reset={this.state.stopwatchReset}
-                           options={options}
-                           getTime={this.getFormattedTime} />
-
-
+                {(!this.state.chronoAlreadyDone) &&
+                <Timer
+                    totalDuration={this.state.totalDuration} msecs start={this.state.timerStart}
+                    reset={this.state.timerReset}
+                    handleFinish={this.handleTimerComplete}/>
+                }
+                {this.state.chronoAlreadyDone &&
+                <Text>TIME OUT</Text>
+                }
+                {this.state.chronoAlreadyDone &&
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("TriIdeas", {arrayIdeas : this.state.arrayIdeas})}>
+                    <Text> Passer à la suite ! </Text>
+                </TouchableOpacity>
+                }
             </View>
         )
     }
 
+    handleTimerComplete = () => {
+        if(!this.state.chronoAlreadyDone){
+            console.log("fini", this.state.arrayIdeas);
+            this.resetTimer();
+            this.setState(
+                {chronoAlreadyDone : true}
+            )
+        }
+    }
+
     handleIdeas(idea) {
-        if (idea !== ""){
+        if (idea !== "") {
             this.state.arrayIdeas.push(idea);
             this.setState({
                 text: ""
             })
-        }
-        if (this.chronoActive === false){
-            this.setChrono();
+            if (this.chronoActive === false && !this.state.chronoAlreadyDone) {
+                console.log("hééé");
+                this.setChrono();
+            }
         }
     }
 
-    setChrono(){
-        if(this.chronoAlreadyDone === true){
+    setChrono() {
+        if (this.chronoAlreadyDone === true) {
             console.log("error chrono already done");
         } else {
-            // TODO chrono
+            this.startTimer();
+            this.chronoActive = true;
         }
     }
 
-    toggleTimer() {
-        this.setState({timerStart: !this.state.timerStart, timerReset: false});
+    startTimer() {
+        this.setState({timerStart: true, timerReset: false});
     }
 
     resetTimer() {
         this.setState({timerStart: false, timerReset: true});
-    }
-
-    toggleStopwatch() {
-        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
-    }
-
-    resetStopwatch() {
-        this.setState({stopwatchStart: false, stopwatchReset: true});
     }
 
     handleIndex(sign) {

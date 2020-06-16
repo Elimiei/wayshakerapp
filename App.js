@@ -11,6 +11,7 @@ import ProjectsScreen from "./screens/projectsScreen";
 import Header from "@react-navigation/stack/src/views/Header/Header";
 import React from "react";
 import CreateIdeas from "./screens/find/createIdeas";
+import TriIdees from "./screens/find/triIdees";
 
 
 const AppStack = createStackNavigator({
@@ -19,7 +20,8 @@ const AppStack = createStackNavigator({
     Dig : DigScreen,
     Validate : ValidateScreen,
     Projects : ProjectsScreen,
-    CreateIdeas : CreateIdeas
+    CreateIdeas : CreateIdeas,
+    TriIdeas : TriIdees
 })
 
 const AuthStack = createStackNavigator({
