@@ -12,6 +12,7 @@ import Header from "@react-navigation/stack/src/views/Header/Header";
 import React from "react";
 import CreateIdeas from "./screens/find/createIdeas";
 import TriIdees from "./screens/find/triIdees";
+import SummaryIdeas from "./screens/find/summaryIdeas";
 
 
 const AppStack = createStackNavigator({
@@ -21,7 +22,8 @@ const AppStack = createStackNavigator({
     Validate : ValidateScreen,
     Projects : ProjectsScreen,
     CreateIdeas : CreateIdeas,
-    TriIdeas : TriIdees
+    TriIdeas : TriIdees,
+    SummaryIdeas : SummaryIdeas
 })
 
 const AuthStack = createStackNavigator({

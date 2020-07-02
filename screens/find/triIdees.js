@@ -1,8 +1,9 @@
 import React from 'react'
 import {StyleSheet, Text, TextInput, View} from 'react-native'
-import {ideasCollection} from "../../database/firebaseDB";
+import {ideasCollection, user} from "../../database/firebaseDB";
 import GestureRecognizer from 'react-native-swipe-gestures';
 import StarRating from "react-native-star-rating";
+import * as firebase from "firebase";
 
 
 export default class TriIdees extends React.Component {
@@ -93,11 +94,7 @@ export default class TriIdees extends React.Component {
                 }
             )
         } else {
-            this.setState(
-                {
-                    titleIdea: "Plus d'idées !"
-                }
-            )
+            this.props.navigation.navigate("SummaryIdeas");
         }
     }
 
@@ -107,35 +104,35 @@ export default class TriIdees extends React.Component {
                 this.length = this.arrayIdeas.length;
             }
             if (this.indexIdeas < this.length - 1) {
-
                 let idea = this.arrayIdeas[this.indexIdeas];
-                ideasCollection.add(
-                    {
-                        name: idea,
-                        description: this.state.text,
-                        rating: this.state.starCount
-                    }
-                ).then(() => {
+                if (firebase.auth().currentUser.uid){
+                    ideasCollection.add(
+                        {
+                            name: idea,
+                            description: this.state.text,
+                            rating: this.state.starCount
+                        }
+                    ).then(() => {
+                        this.setState(
+                            {
+                                text: ""
+                            }
+                        )
+                        console.log('Idea added !');
+                    });
+
+                    this.indexIdeas += 1;
                     this.setState(
                         {
-                            text: ""
+                            titleIdea: this.arrayIdeas[this.indexIdeas]
                         }
                     )
-                    console.log('Idea added !');
-                });
+                } else {
+                    alert("Il faut être connecté !");
+                }
 
-                this.indexIdeas += 1;
-                this.setState(
-                    {
-                        titleIdea: this.arrayIdeas[this.indexIdeas]
-                    }
-                )
             } else {
-                this.setState(
-                    {
-                        titleIdea: "Plus d'idées !"
-                    }
-                )
+                this.props.navigation.navigate("SummaryIdeas");
             }
         } else {
             alert("Il faut compléter la description");

@@ -1,8 +1,7 @@
 import * as firebase from 'firebase';
 import firestore from '@react-native-firebase/firestore';
 
-export {usersCollection, questionsCollection, ideasCollection};
-
+export {usersCollection, questionsCollection, ideasCollection, signedIn};
 
 const firebaseConfig = {
     apiKey: "AIzaSyAQg2Zmo1arwL_ZfJiTnrVGo8NtOdfJT8Y",
@@ -19,13 +18,22 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-const user = firebase.auth().currentUser;
+let signedIn = false;
+let ideasCollection;
+
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        console.log("UN USER")
+        signedIn = true;
+        ideasCollection = usersCollection.doc(user.uid).collection('ideas');
+    } else {
+        signedIn = false;
+    }
+});
 
 const usersCollection = firestore().collection('Users');
 const questionsCollection = firestore().collection('Questions');
-let ideasCollection = "";
-if (user) {
-    ideasCollection = usersCollection.doc(user.uid).collection('ideas');
-}
+
+
 
 export default firebase;

@@ -13,7 +13,7 @@ export default class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        var user = firebase.auth().currentUser;
+        const user = firebase.auth().currentUser;
         usersCollection.doc(user.uid).get().then(
             (res) => {
                 this.setState({
@@ -34,7 +34,6 @@ export default class HomeScreen extends React.Component {
     handleLink(link) {
         switch (link) {
             case "trouver":
-                console.log(link);
                 this.props.navigation.navigate("Find")
                 break;
             case "creuser" :
@@ -46,7 +45,6 @@ export default class HomeScreen extends React.Component {
             case "voir" :
                 this.props.navigation.navigate("Projects")
                 break;
-
         }
     }
 
