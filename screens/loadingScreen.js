@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native'
+import {View, Text, StyleSheet, ActivityIndicator, Image} from 'react-native'
 import firebase from "./../database/firebaseDB";
 
 export default class LoadingScreen extends React.Component {
@@ -12,7 +12,8 @@ export default class LoadingScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text> Loading ...</Text>
+                <Image style={styles.logo} source={require('./../images/Logo-final.png')} />
+                <Text> Le programme qui t'apprends à trouver ta voie.</Text>
                 <ActivityIndicator size={"large"}></ActivityIndicator>
             </View>
         )

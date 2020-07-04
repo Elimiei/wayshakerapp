@@ -1,6 +1,7 @@
 import React from 'react'
-import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import firebase from "./../database/firebaseDB";
+import AutoHeightImage from "react-native-auto-height-image";
 
 export default class LoginScreen extends React.Component {
     state = {
@@ -19,30 +20,33 @@ export default class LoginScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.greeting}>
-                    {`Hello again \n Welcome back`}
-                </Text>
+                <AutoHeightImage
+                    style={styles.logo}
+                    width={300}
+                    source={require('./../images/Logo-final.png')}
+                />
 
+                <Text>CONNEXION</Text>
                 <View style={styles.errorMessage}>
                     {this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text>}
                 </View>
 
                 <View style={styles.form}>
                     <View>
-                        <Text style={styles.inputTitle}>Email address</Text>
                         <TextInput style={styles.input}
                                    autocapitalize="none"
                                    onChangeText={email => this.setState({email})}
                                    value={this.state.email}
+                                   placeholder={"Email"}
                         />
                     </View>
 
                     <View style={{marginTop: 32}}>
-                        <Text style={styles.inputTitle}>Password</Text>
                         <TextInput style={styles.input} secureTextEntry
                                    autocapitalize="none"
                                    onChangeText={password => this.setState({password})}
-                                   value={this.state.password}/>
+                                   value={this.state.password}
+                                   placeholder={"Mot de passe"}/>
                     </View>
                 </View>
 
@@ -51,9 +55,14 @@ export default class LoginScreen extends React.Component {
                     <Text style={{color: "#FFF", fontWeight: "500"}}>Sign in !</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{alignSelf: "center", marginTop: 32}} onPress={() => this.props.navigation.navigate("Register")}>
-                    <Text> New ? <Text>Register !</Text></Text>
-                </TouchableOpacity>
+                <View style={styles.bottom}>
+                    <Text>Pas encore de compte ?</Text>
+                    <TouchableOpacity style={{alignSelf: "center", marginTop: 32}}
+                                      onPress={() => this.props.navigation.navigate("Register")}>
+                        <Text> Inscris toi !</Text>
+                    </TouchableOpacity>
+                </View>
+
 
             </View>
         )
@@ -62,7 +71,9 @@ export default class LoginScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        alignItems: "center",
+        backgroundColor: "white"
     },
     greeting: {
         marginTop: 32,
@@ -79,7 +90,8 @@ const styles = StyleSheet.create({
     },
     form: {
         marginBottom: 48,
-        marginHorizontal: 30
+        marginHorizontal: 30,
+        width: 300
     },
     inputTitle: {
         color: "#8A8F9E",
@@ -87,18 +99,25 @@ const styles = StyleSheet.create({
         textTransform: "uppercase"
     },
     input: {
-        borderBottomColor: "#8A8F9E",
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40,
-        fontSize: 15,
-        color: "#161F3D"
+        textAlign: 'center',
+        height: 50,
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        borderRadius: 20,
+        backgroundColor: "#FFFFFF"
     },
     button: {
         marginHorizontal: 30,
-        backgroundColor: "#E9446A",
-        borderRadius: 4,
+        backgroundColor: "#ED7047",
+        borderRadius: 20,
+        borderBottomRightRadius: 0,
         height: 52,
+        width: 200,
         alignItems: "center",
         justifyContent: "center"
+    },
+    logo: {},
+    bottom: {
+        marginTop: 20
     }
 })

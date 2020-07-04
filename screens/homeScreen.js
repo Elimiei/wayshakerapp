@@ -51,7 +51,7 @@ export default class HomeScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text> Content de te revoir {this.state.firstName} {this.state.name} !</Text>
+                <Text style={styles.content}> Content de te revoir {this.state.firstName} {this.state.name} !</Text>
 
                 <TouchableOpacity style={{marginTop: 32}} onPress={() => this.handleLink("trouver")}>
                     <Text> Trouver une idée </Text>
@@ -84,5 +84,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
-    buttonContainer: {}
+    buttonContainer: {},
+    content: {
+        fontFamily: 'Chivo',
+    }
 })

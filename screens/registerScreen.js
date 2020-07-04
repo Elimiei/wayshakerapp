@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
+import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import firebase, {usersCollection} from "./../database/firebaseDB";
 
 export default class RegisterScreen extends React.Component {
@@ -42,9 +42,9 @@ export default class RegisterScreen extends React.Component {
     render() {
 
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <Text style={styles.greeting}>
-                    {`Hello new user ! Sign up to get started`}
+                    {`Bienvenue à toi ! Inscris-toi pour pouvoir commencer.`}
                 </Text>
 
                 <View style={styles.errorMessage}>
@@ -52,65 +52,62 @@ export default class RegisterScreen extends React.Component {
                 </View>
 
                 <View style={styles.form}>
-                    <View>
-                        <Text style={styles.inputTitle}>Name</Text>
-                        <TextInput style={styles.input}
-                                   autocapitalize="none"
-                                   onChangeText={name => this.setState({name})}
-                                   value={this.state.name}
-                        />
-                    </View>
-                    <View>
-                        <Text style={styles.inputTitle}>firstName</Text>
+                    <View style={{marginTop: 30}}>
                         <TextInput style={styles.input}
                                    autocapitalize="none"
                                    onChangeText={firstName => this.setState({firstName})}
                                    value={this.state.firstName}
+                                   placeholder={"Prénom"}
                         />
                     </View>
-                    <View>
-                        <Text style={styles.inputTitle}>Age range</Text>
+                    <View style={{marginTop: 30}}>
+                        <TextInput style={styles.input}
+                                   autocapitalize="none"
+                                   onChangeText={name => this.setState({name})}
+                                   value={this.state.name}
+                                   placeholder={"Nom de famille"}
+                        />
+                    </View>
+                    <View style={{marginTop: 30}}>
                         <TextInput style={styles.input}
                                    autocapitalize="none"
                                    onChangeText={ageRange => this.setState({ageRange})}
                                    value={this.state.ageRange}
+                                   placeholder={"Tranche d'âge"}
                         />
                     </View>
-                    <View>
-                        <Text style={styles.inputTitle}>Email address</Text>
+                    <View style={{marginTop: 30}}>
                         <TextInput style={styles.input}
                                    autocapitalize="none"
                                    onChangeText={email => this.setState({email})}
                                    value={this.state.email}
+                                   placeholder={"E-mail"}
                         />
                     </View>
 
-                    <View style={{marginTop: 32}}>
-                        <Text style={styles.inputTitle}>Password</Text>
+                    <View style={{marginTop: 30}}>
                         <TextInput style={styles.input} secureTextEntry
                                    autocapitalize="none"
                                    onChangeText={password => this.setState({password})}
-                                   value={this.state.password}/>
+                                   value={this.state.password}
+                                   placeholder={"Mot de passe"}/>
                     </View>
                 </View>
 
                 <TouchableOpacity style={styles.button}
                                   onPress={this.handleRegister}>
-                    <Text style={{color: "#FFF", fontWeight: "500"}}>Sign up !</Text>
+                    <Text style={{color: "#FFF", fontWeight: "500"}}>Commencer l'aventure !</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{alignSelf: "center", marginTop: 32}}>
-                    <Text> New ? <Text>Register !</Text></Text>
-                </TouchableOpacity>
-
-            </View>
+            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: "white"
     },
     greeting: {
         marginTop: 32,
@@ -126,6 +123,7 @@ const styles = StyleSheet.create({
         fontSize: 13
     },
     form: {
+        marginTop: -60,
         marginBottom: 48,
         marginHorizontal: 30
     },
@@ -135,17 +133,20 @@ const styles = StyleSheet.create({
         textTransform: "uppercase"
     },
     input: {
-        borderBottomColor: "#8A8F9E",
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 40,
-        fontSize: 15,
-        color: "#161F3D"
+        textAlign: 'center',
+        height: 50,
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        borderRadius: 20,
+        backgroundColor: "#FFFFFF"
     },
     button: {
         marginHorizontal: 30,
-        backgroundColor: "#E9446A",
-        borderRadius: 4,
+        backgroundColor: "#ED7047",
+        borderRadius: 20,
+        borderBottomRightRadius: 0,
         height: 52,
+        width: 300,
         alignItems: "center",
         justifyContent: "center"
     }

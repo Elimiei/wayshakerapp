@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {Button, Modal, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View} from 'react-native'
 import {ideasCollection, signedIn} from "../database/firebaseDB";
 import {Icon} from "react-native-elements";
 import {FlatGrid} from 'react-native-super-grid';
-
 
 
 export default class DigScreen extends React.Component {
@@ -40,6 +39,7 @@ export default class DigScreen extends React.Component {
             <View>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Home")}><Text> Retour à
                     l'accueil </Text></TouchableOpacity>
+
                 <FlatGrid
                     itemDimension={150}
                     data={this.state.arrayIdeas}
@@ -47,21 +47,10 @@ export default class DigScreen extends React.Component {
                         <View style={styles.item}>
                             <Text>{item.name}</Text>
                             <Text>{item.description}</Text>
-                            <Icon name={"pencil"} type='font-awesome' onPress={() => this.modifyIdea(item)}/>
+                            <Icon name={"check"} type='font-awesome' onPress={() => this.chooseIdea(item)}/>
                         </View>
                     )}
                 />
-
-                <Button title="Show modal" onPress={this.toggleModal.bind(this)}/>
-
-                <Modal isVisible={false}>
-                    <View>
-                        <Text>Hello!</Text>
-
-                        <Button title="Hide modal" onPress={this.toggleModal.bind(this)}/>
-                    </View>
-                </Modal>
-
             </View>
 
 
@@ -69,25 +58,8 @@ export default class DigScreen extends React.Component {
 
     }
 
-    toggleModal() {
-        console.log(this.state.modalVisible);
-        this.setState({
-            modalVisible: !this.state.modalVisible
-        })
-    }
-
-
-    modifyIdea(item) {
-        if (signedIn) {
-            console.log(item);
-            ideasCollection.doc(item.id).get()
-                .then(res => {
-                    console.log("data", res.data());
-                });
-        } else {
-            console.log('PROBLEME USER');
-        }
-
+    chooseIdea() {
+       console.log("ok");
     }
 }
 
