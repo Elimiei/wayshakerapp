@@ -1,15 +1,16 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, Button, TextInput} from 'react-native'
-import firebase, {questionsCollection, usersCollection} from "../../database/firebaseDB";
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
+import {questionsCollection} from "../../database/firebaseDB";
 import index from "@react-native-community/masked-view";
-import {Stopwatch, Timer} from 'react-native-stopwatch-timer'
+import {Timer} from 'react-native-stopwatch-timer'
+import {Icon} from 'react-native-elements'
 
 
 export default class CreateIdeas extends React.Component {
 
     indexQuestion = 0;
     arrayQuestions = [];
-    placeholder = "Comment ça marche ? \n" +
+    placeholder = "Comment ça marche ? \n \n" +
         "1- J'écris UNE idée\n" +
         "2- Je clique sur \"envoyer\"\n" +
         "3- J'écris UNE idée\n" +
@@ -18,13 +19,28 @@ export default class CreateIdeas extends React.Component {
         "Ainsi de suite...";
     chronoActive = false;
 
+    options = {
+        container: {
+            backgroundColor: '#fff',
+            padding: 5,
+            borderRadius: 5,
+            width: 220,
+            marginTop: 50
+        },
+        text: {
+            fontSize: 30,
+            color: '#000',
+            marginLeft: 7,
+        }
+    }
+
 
     state = {
-        question: "Fais défiler les flèches pour obtenir une question !",
+        question: "A court d'idée ? Utilise les flèches !",
         text: "",
         arrayIdeas: [],
         totalDuration: 6000,
-        chronoAlreadyDone : false
+        chronoAlreadyDone: false
     }
 
 
@@ -41,40 +57,51 @@ export default class CreateIdeas extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text> Qu'aimerais-tu faire de ta vie ?</Text>
+                <Text style={styles.title}>Qu'est ce que j'ai envie de <Text style={styles.faire}>faire</Text> dans ma
+                    vie ?</Text>
 
-                <Text> A court d'idée ? Utilise les flèches ! </Text>
-                <TouchableOpacity onPress={() => this.handleIndex("-")}>
-                    <Text> gauche </Text>
-                </TouchableOpacity>
-                <Text> {this.state.question} </Text>
-                <TouchableOpacity onPress={() => this.handleIndex("+")}>
-                    <Text> droite </Text>
-                </TouchableOpacity>
+                <View style={styles.questions}>
+                    <TouchableOpacity onPress={() => this.handleIndex("-")}>
+                        <Icon color={"#0570B8"} size={50} name={"chevron-left"}/>
+                    </TouchableOpacity>
+                    <Text style={styles.text}> {this.state.question} </Text>
+                    <TouchableOpacity onPress={() => this.handleIndex("+")}>
+                        <Icon color={"#0570B8"} size={50} name={"chevron-right"}/>
+                    </TouchableOpacity>
+                </View>
+
 
                 <TextInput
                     multiline={true}
-                    numberOfLines={4}
+                    numberOfLines={3}
                     onChangeText={(text) => this.setState({text})}
                     placeholder={this.placeholder}
-                    value={this.state.text}/>
+                    value={this.state.text}
+                    style={styles.input}/>
 
-                <TouchableOpacity onPress={() => this.handleIdeas(this.state.text)}>
-                    <Text> Envoyer ! </Text>
+                <TouchableOpacity style={styles.button} onPress={() => this.handleIdeas(this.state.text)}>
+                    <Text style={styles.envoyer}> Envoyer ! </Text>
                 </TouchableOpacity>
 
                 {(!this.state.chronoAlreadyDone) &&
                 <Timer
                     totalDuration={this.state.totalDuration} msecs start={this.state.timerStart}
                     reset={this.state.timerReset}
-                    handleFinish={this.handleTimerComplete}/>
+                    handleFinish={this.handleTimerComplete}
+                    options={this.options}/>
                 }
                 {this.state.chronoAlreadyDone &&
-                <Text>TIME OUT</Text>
+                <Text style={styles.timeout}>TIME OUT</Text>
                 }
                 {this.state.chronoAlreadyDone &&
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("TriIdeas", {arrayIdeas : this.state.arrayIdeas})}>
-                    <Text> Passer à la suite ! </Text>
+                <Text style={styles.textBottom}>Il te reste des idées ?
+                    Prends le temps de les envoyer.
+
+                    Une fois que tu es prêt.e, tu peux passer à la suite !</Text>}
+                {this.state.chronoAlreadyDone &&
+                <TouchableOpacity style={styles.buttonSuite}
+                                  onPress={() => this.props.navigation.navigate("TriIdeas", {arrayIdeas: this.state.arrayIdeas})}>
+                    <Text style={styles.envoyer}> Passer à la suite ! </Text>
                 </TouchableOpacity>
                 }
             </View>
@@ -82,11 +109,11 @@ export default class CreateIdeas extends React.Component {
     }
 
     handleTimerComplete = () => {
-        if(!this.state.chronoAlreadyDone){
+        if (!this.state.chronoAlreadyDone) {
             console.log("fini", this.state.arrayIdeas);
             this.resetTimer();
             this.setState(
-                {chronoAlreadyDone : true}
+                {chronoAlreadyDone: true}
             )
         }
     }
@@ -152,8 +179,69 @@ export default class CreateIdeas extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: "flex-start",
+        alignItems: "center",
+        backgroundColor: "white"
     },
-    buttonContainer: {}
+    buttonContainer: {},
+    title: {
+        fontFamily: "Chivo-Black",
+        color: "#ED7047",
+        fontSize: 20,
+        margin: 20,
+    },
+    faire: {
+        color: "#0570B8"
+    },
+    questions: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    text: {
+        width: 170,
+        textAlign: "center",
+        flex: 2
+    },
+    input: {
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: "lightgray",
+        width: 250,
+        marginTop: 20
+    },
+    button: {
+        marginHorizontal: 30,
+        backgroundColor: "#0570B8",
+        borderRadius: 20,
+        borderBottomRightRadius: 0,
+        height: 52,
+        width: 200,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 25
+    },
+    buttonSuite: {
+        marginHorizontal: 30,
+        backgroundColor: "#ED7047",
+        borderRadius: 20,
+        borderBottomRightRadius: 0,
+        height: 52,
+        width: 200,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 30
+    },
+    envoyer: {
+        color: "white",
+        fontFamily: "Chivo-Regular",
+        fontSize: 15
+    },
+    timeout: {
+        fontFamily: "Chivo-Black",
+        fontSize: 20,
+        marginTop: 30
+    },
+    textBottom: {
+        width: 200
+    }
 })

@@ -51,26 +51,27 @@ export default class HomeScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.content}> Content de te revoir {this.state.firstName} {this.state.name} !</Text>
+                <Text style={styles.content}> Content de te revoir <Text style={styles.pseudo}> {this.state.firstName} </Text>  !</Text>
+                <Text style={styles.text}> Quelle étape souhaites-tu faire aujourd'hui ?</Text>
 
-                <TouchableOpacity style={{marginTop: 32}} onPress={() => this.handleLink("trouver")}>
+                <TouchableOpacity style={styles.links}  onPress={() => this.handleLink("trouver")}>
                     <Text> Trouver une idée </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{marginTop: 32}} onPress={() => this.handleLink("creuser")}>
+                <TouchableOpacity style={styles.links} onPress={() => this.handleLink("creuser")}>
                     <Text> Creuser une idée </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{marginTop: 32}} onPress={() => this.handleLink("valider")}>
+                <TouchableOpacity style={styles.links} onPress={() => this.handleLink("valider")}>
                     <Text> Valider une idée </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{marginTop: 32}} onPress={() => this.handleLink("voir")}>
+                <TouchableOpacity style={styles.links} onPress={() => this.handleLink("voir")}>
                     <Text> Voir mes projets </Text>
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={{marginTop: 32}} onPress={this.signOutUser}>
+                <TouchableOpacity style={styles.logout} onPress={this.signOutUser}>
                     <Text> Logout </Text>
                 </TouchableOpacity>
             </View>
@@ -81,11 +82,43 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: "flex-start",
+        alignItems: "center",
+        backgroundColor: "white"
     },
     buttonContainer: {},
     content: {
-        fontFamily: 'Chivo',
+        fontFamily: "Chivo-Black",
+        color: "#ED7047",
+        fontSize: 20,
+        margin:10,
+    },
+    text: {
+        marginBottom: 30
+    },
+    pseudo: {
+        color: "#0570B8"
+    },
+    links: {
+        marginTop: 32,
+        borderWidth:1,
+        borderColor: "lightgray",
+        width: 250,
+        height: 50,
+        borderRadius: 20,
+        borderBottomRightRadius: 0,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    logout: {
+        alignSelf: "flex-end",
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: "lightgray",
+        marginRight: 10,
+        marginTop: 100,
+        backgroundColor: "#ED7047",
+        color: "white",
+        fontFamily: "Chivo-Regular"
     }
 })

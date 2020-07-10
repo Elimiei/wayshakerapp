@@ -1,6 +1,7 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, Button, Image} from 'react-native'
 import firebase, {usersCollection} from "../../database/firebaseDB";
+import AutoHeightImage from "react-native-auto-height-image";
 
 
 export default class FindScreen extends React.Component {
@@ -12,10 +13,16 @@ export default class FindScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Exercice du brainstorming</Text>
+                <Text style={styles.text}>1. Exercice du brainstorming</Text>
 
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("CreateIdeas")}>
-                    <Text>GO !</Text>
+                <AutoHeightImage
+                    style={styles.logo}
+                    width={300}
+                    source={require('./../../images/200.gif')}
+                />
+
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.props.navigation.navigate("CreateIdeas")}>
+                    <Text style={styles.textgo}>GO !</Text>
                 </TouchableOpacity>
 
             </View>
@@ -26,8 +33,30 @@ export default class FindScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: "flex-start",
+        alignItems: "center",
+        backgroundColor: "white"
     },
-    buttonContainer: {}
+    buttonContainer: {
+        marginTop: 150,
+        backgroundColor: "#ED7047",
+        width: 250,
+        height: 50,
+        borderRadius: 20,
+        borderBottomRightRadius: 0,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    text: {
+        fontFamily: "Chivo-Black",
+        color: "#ED7047",
+        fontSize: 20,
+        marginBottom: 70,
+        marginTop: 10
+    },
+    textgo: {
+        color: "white",
+        fontFamily: "Chivo-Regular",
+        fontSize: 20
+    }
 })
