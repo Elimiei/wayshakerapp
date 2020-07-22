@@ -16,10 +16,23 @@ export default class SummaryIdeas extends React.Component {
     }
 
     componentDidMount() {
+        this.refresh();
+        this.setState({modalConsultVisible: false})
+    }
+
+
+    forceUpdateHandler(){
+        console.log('ok')
+        this.forceUpdate();
+    };
+
+    refresh() {
+        this.tmpIdeasArray = [];
         if (signedIn) {
             ideasCollection.get()
                 .then(res => {
                     res.forEach(document => {
+                        console.log(document.data())
                         this.tmpIdeasArray.push({
                             data: document.data(),
                             id: document.id
@@ -31,13 +44,12 @@ export default class SummaryIdeas extends React.Component {
             console.log('PROBLEME USER');
         }
 
-        this.setState({modalConsultVisible: false})
     }
 
 
     render() {
         return (
-            <View>
+            <View style={styles.container}>
                 <Modal visible={this.state.modalConsultVisible}>
                     <View>
                         <Text>Hello!</Text>
@@ -45,8 +57,12 @@ export default class SummaryIdeas extends React.Component {
                         <Text>Nom : {this.state.name}</Text>
                         <Text>Description : {this.state.description}</Text>
 
-                        <TouchableOpacity onPress={() => this.setState({modalConsultVisible : false})}><Text>Fermer</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.setState({modalConsultVisible:false, modalEditVisible: true})}><Text>Modifier</Text></TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.setState({modalConsultVisible: false})}><Text>Fermer</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.setState({
+                            modalConsultVisible: false,
+                            modalEditVisible: true
+                        })}><Text>Modifier</Text></TouchableOpacity>
                         <TouchableOpacity onPress={() => this.deleteIdea()}><Text>Supprimer</Text></TouchableOpacity>
                     </View>
                 </Modal>
@@ -72,7 +88,8 @@ export default class SummaryIdeas extends React.Component {
                             })}
                             placeholder={this.state.description}
                             value={this.state.description}/>
-                        <TouchableOpacity onPress={() => this.setState({modalEditVisible : false})}><Text>Fermer</Text></TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.setState({modalEditVisible: false})}><Text>Fermer</Text></TouchableOpacity>
                         <TouchableOpacity onPress={() => this.modifyIdea()}><Text>Valider</Text></TouchableOpacity>
                     </View>
                 </Modal>
@@ -85,9 +102,19 @@ export default class SummaryIdeas extends React.Component {
                     data={this.state.arrayIdeas}
                     renderItem={({item}) => (
                         <View style={styles.item}>
-                            <Text>{item.name}</Text>
-                            <Text>{item.description}</Text>
-                            <Icon name={"pencil"} style={styles.icon} type='font-awesome' onPress={() => this.toggleModalConsult(item)}/>
+                            <Text>{item.data.name}</Text>
+                            <Text>{item.data.description}</Text>
+
+                            <View style={styles.itemBottom}>
+                                <View style={styles.crayon}>
+                                    <Icon name={"pencil"} style={styles.icon} type='font-awesome' size={20}
+                                          onPress={() => this.toggleModalConsult(item)}/>
+                                </View>
+                                <View style={styles.poubelle}>
+                                    <Icon name={"trash"} style={styles.icon} type='font-awesome' size={20}
+                                          onPress={() => this.deleteIdea(item)}/>
+                                </View>
+                            </View>
                         </View>
                     )}
                 />
@@ -147,17 +174,27 @@ export default class SummaryIdeas extends React.Component {
         });
 
 
-
     }
 
-    deleteIdea(){
-        ideasCollection.doc(this.state.id).delete()
-            .then(() => {
-            console.log('Idea deleted!');
+    deleteIdea(item) {
+
+        if (signedIn) {
+            console.log("item", item);
             this.setState({
-                modalConsultVisible : false
+                id: item.id
             })
-        });
+            ideasCollection.doc(this.state.id).delete()
+                .then(() => {
+                    console.log('Idea deleted!');
+                    this.setState({
+                        modalConsultVisible: false,
+
+                    })
+                    this.refresh();
+                });
+        } else {
+            console.log('PROBLEME USER');
+        }
     }
 }
 
@@ -165,22 +202,48 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        backgroundColor: "white"
     },
     buttonContainer: {},
     col: {
         width: 15
     },
     item: {
-        backgroundColor: "grey",
+        backgroundColor: "white",
+        borderColor: "lightgray",
+        borderWidth: 1,
+        borderRadius: 20,
         color: "white",
-        height: 100
+        height: 100,
+        padding: 10
     },
     icon: {
-        width:10,
-        height:10
+        width: 10,
+        height: 10
     },
     centeredView: undefined,
     modalView: undefined,
-    modalText: undefined
+    modalText: undefined,
+    crayon: {
+        borderColor: "lightgray",
+        borderWidth: 1,
+        width: 40,
+        padding: 2,
+        borderRadius: 5,
+        margin: 5
+    },
+    poubelle: {
+        borderColor: "lightgray",
+        borderWidth: 1,
+        borderRadius: 5,
+        borderBottomRightRadius: 0,
+        padding: 2,
+        width: 40,
+        margin: 5
+    },
+    itemBottom: {
+        margin: 10,
+        flexDirection: "row",
+        alignSelf: "center"
+    }
 })
