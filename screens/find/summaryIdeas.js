@@ -3,6 +3,7 @@ import {Modal, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-
 import {ideasCollection, signedIn} from "../../database/firebaseDB";
 import {Icon} from "react-native-elements";
 import {FlatGrid} from 'react-native-super-grid';
+import StarRating from "react-native-star-rating";
 
 
 export default class SummaryIdeas extends React.Component {
@@ -12,19 +13,14 @@ export default class SummaryIdeas extends React.Component {
     state = {
         arrayIdeas: [],
         modalConsultVisible: false,
-        modalEditVisible: false
+        modalEditVisible: false,
+        startCount: 3
     }
 
     componentDidMount() {
         this.refresh();
         this.setState({modalConsultVisible: false})
     }
-
-
-    forceUpdateHandler(){
-        console.log('ok')
-        this.forceUpdate();
-    };
 
     refresh() {
         this.tmpIdeasArray = [];
@@ -50,47 +46,37 @@ export default class SummaryIdeas extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Modal visible={this.state.modalConsultVisible}>
-                    <View>
-                        <Text>Hello!</Text>
+                <Modal visible={this.state.modalConsultVisible} transparent={true}>
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modal}>
 
-                        <Text>Nom : {this.state.name}</Text>
-                        <Text>Description : {this.state.description}</Text>
+                            <Icon name={"close"} type='font-awesome' size={25} style={styles.close}
+                                onPress={() => this.setState({modalConsultVisible: false})}/>
 
-                        <TouchableOpacity
-                            onPress={() => this.setState({modalConsultVisible: false})}><Text>Fermer</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.setState({
-                            modalConsultVisible: false,
-                            modalEditVisible: true
-                        })}><Text>Modifier</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.deleteIdea()}><Text>Supprimer</Text></TouchableOpacity>
-                    </View>
-                </Modal>
+                            <Text>Nom :</Text>
+                            <TextInput
+                                multiline={false}
+                                onChangeText={(text) => this.setState({
+                                    name: text
+                                })}
+                                placeholder={this.state.name}
+                                value={this.state.name}/>
 
-                <Modal visible={this.state.modalEditVisible}>
-                    <View>
-                        <Text>Hello!</Text>
-                        <Text>Nom :</Text>
-                        <TextInput
-                            multiline={false}
-                            onChangeText={(text) => this.setState({
-                                name: text
-                            })}
-                            placeholder={this.state.name}
-                            value={this.state.name}/>
-
-                        <Text>Description : </Text>
-                        <TextInput
-                            multiline={true}
-                            numberOfLines={4}
-                            onChangeText={(text) => this.setState({
-                                description: text
-                            })}
-                            placeholder={this.state.description}
-                            value={this.state.description}/>
-                        <TouchableOpacity
-                            onPress={() => this.setState({modalEditVisible: false})}><Text>Fermer</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.modifyIdea()}><Text>Valider</Text></TouchableOpacity>
+                            <Text>Description : </Text>
+                            <TextInput
+                                multiline={true}
+                                numberOfLines={4}
+                                onChangeText={(text) => this.setState({
+                                    description: text
+                                })}
+                                placeholder={this.state.description}
+                                value={this.state.description}/>
+                            <View style={styles.save}>
+                            <Icon name={"check"} style={styles.icon} color={"white"} type='font-awesome'
+                                  size={25}
+                                  onPress={() => this.modifyIdea()}/>
+                            </View>
+                        </View>
                     </View>
                 </Modal>
 
@@ -102,16 +88,28 @@ export default class SummaryIdeas extends React.Component {
                     data={this.state.arrayIdeas}
                     renderItem={({item}) => (
                         <View style={styles.item}>
-                            <Text>{item.data.name}</Text>
-                            <Text>{item.data.description}</Text>
+                            <Text style={styles.nameModal}>{item.data.name}</Text>
+                            <Text style={styles.description}>{item.data.description}</Text>
+
+                            <StarRating
+                                disabled={true}
+                                emptyStar={'ios-star-outline'}
+                                fullStar={'ios-star'}
+                                halfStar={'ios-star-half'}
+                                iconSet={'Ionicons'}
+                                maxStars={3}
+                                rating={item.data.rating}
+                                fullStarColor={'#ED7047'}
+                            />
 
                             <View style={styles.itemBottom}>
                                 <View style={styles.crayon}>
-                                    <Icon name={"pencil"} style={styles.icon} type='font-awesome' size={20}
+                                    <Icon name={"pencil"} style={styles.icon} color={"white"} type='font-awesome'
+                                          size={25}
                                           onPress={() => this.toggleModalConsult(item)}/>
                                 </View>
                                 <View style={styles.poubelle}>
-                                    <Icon name={"trash"} style={styles.icon} type='font-awesome' size={20}
+                                    <Icon name={"trash"} style={styles.icon} type='font-awesome' size={25}
                                           onPress={() => this.deleteIdea(item)}/>
                                 </View>
                             </View>
@@ -164,6 +162,7 @@ export default class SummaryIdeas extends React.Component {
             }
         ).then(() => {
             console.log('Idea updated!');
+            this.refresh();
             this.setState({
                 modalEditVisible: false,
                 name: "",
@@ -214,28 +213,26 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 20,
         color: "white",
-        height: 100,
         padding: 10
     },
     icon: {
         width: 10,
-        height: 10
+        height: 10,
     },
     centeredView: undefined,
     modalView: undefined,
     modalText: undefined,
     crayon: {
-        borderColor: "lightgray",
-        borderWidth: 1,
         width: 40,
         padding: 2,
-        borderRadius: 5,
-        margin: 5
+        borderRadius: 10,
+        margin: 5,
+        backgroundColor: "#0570B8"
     },
     poubelle: {
         borderColor: "lightgray",
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 10,
         borderBottomRightRadius: 0,
         padding: 2,
         width: 40,
@@ -244,6 +241,38 @@ const styles = StyleSheet.create({
     itemBottom: {
         margin: 10,
         flexDirection: "row",
+        alignSelf: "center"
+    },
+    modalBackground: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(100,100,100, 0.5)',
+        padding: 20,
+    },
+    modal: {
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 20
+    },
+    nameModal: {
+        fontWeight: "bold",
+        fontSize: 18
+    },
+    description: {
+        marginVertical: 10
+    },
+    close: {
+        alignSelf: "flex-end"
+    },
+    save: {
+        backgroundColor: "#ED7047",
+        borderRadius: 10,
+        borderBottomRightRadius: 0,
+        padding: 2,
+        width: 100,
+        margin: 5,
         alignSelf: "center"
     }
 })

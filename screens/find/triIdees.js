@@ -130,7 +130,7 @@ export default class TriIdees extends React.Component {
             if (this.indexIdeas === 0) {
                 this.length = this.arrayIdeas.length;
             }
-            if (this.indexIdeas < this.length - 1) {
+            if (this.indexIdeas <= this.length -1) {
                 let idea = this.arrayIdeas[this.indexIdeas];
                 if (firebase.auth().currentUser.uid) {
                     ideasCollection.add(
@@ -149,6 +149,11 @@ export default class TriIdees extends React.Component {
                     });
 
                     this.indexIdeas += 1;
+
+                    if(this.indexIdeas === this.arrayIdeas.length){
+                        this.props.navigation.navigate("SummaryIdeas");
+                    }
+
                     this.setState(
                         {
                             titleIdea: this.arrayIdeas[this.indexIdeas]
