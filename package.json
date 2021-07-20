@@ -27,7 +27,7 @@
     "mysql": "^2.18.1",
     "python2": "0.0.1",
     "react": "16.11.0",
-    "react-native": "0.62.2",
+    "react-native": "0.62.3",
     "react-native-auto-height-image": "^3.2.1",
     "react-native-deck-swiper": "^1.6.7",
     "react-native-easy-grid": "^0.2.2",
